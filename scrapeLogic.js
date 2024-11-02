@@ -1,8 +1,8 @@
-const puppeteer = require("puppeteer");
+const { getRealBrowser } = require("puppeteer-real-browser");
 require("dotenv").config();
 
 const scrapeLogic = async (res) => {
-  const browser = await puppeteer.launch({
+  const browser = await getRealBrowser({
     args: [
       "--disable-setuid-sandbox",
       "--no-sandbox",
@@ -12,8 +12,9 @@ const scrapeLogic = async (res) => {
     executablePath:
       process.env.NODE_ENV === "production"
         ? process.env.PUPPETEER_EXECUTABLE_PATH
-        : puppeteer.executablePath(),
+        : undefined, // Remove `puppeteer.executablePath()`; getRealBrowser handles it
   });
+
   try {
     const page = await browser.newPage();
 
